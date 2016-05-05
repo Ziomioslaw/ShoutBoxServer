@@ -1,0 +1,2 @@
+# ShoutBoxServer
+PHP shoutbox server
