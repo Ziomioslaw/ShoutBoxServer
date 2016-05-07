@@ -29,7 +29,7 @@ $application->register(
     }
 );
 
-$application->route('GET /shout', function() use($application, $shoutBoxTableName) {
+$application->route('GET /shouts', function() use($application, $shoutBoxTableName) {
     $sth = $application->db()->prepare("SELECT
             `ID_SHOUT` AS id,
             `displayname` AS member_name,
