@@ -7,6 +7,11 @@ require_once('../../SSI.php');
 if (!defined('SMF')) {
     die('Hacking attempt...');
 }
+
+if (!$context['user']['is_logged']) {
+    die('Please login');
+}
+
 require_once('vendor/autoload.php');
 
 use flight\Engine;
