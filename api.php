@@ -7,15 +7,16 @@ require_once('../../SSI.php');
 if (!defined('SMF')) {
     die('Hacking attempt...');
 }
-
 require_once('vendor/autoload.php');
 
 use flight\Engine;
 
 $dbConnection = require_once('db.connection.php');
 $shoutBoxTableName = $dbConnection['dbPrefix'] . 'shoutbox';
+$deleteTime = 5 * 60 * 60; // 5 minutes
 
 $application = new Engine();
+$application->register('user', 'User', array($context));
 $application->register(
     'db',
     'PDO',
@@ -29,12 +30,18 @@ $application->register(
     }
 );
 
-$application->route('GET /shouts', function() use($application, $shoutBoxTableName) {
+$application->route('GET /shouts', function() use($application, $shoutBoxTableName, $deleteTime) {
+    $user = $application->user();
+
+    $delete = $user->isAdmin()
+        ? '1'
+        : 'IF(time > ' . (time() - $deleteTime) . ', 1, 0)';
+
     $sth = $application->db()->prepare("SELECT
             `ID_SHOUT` AS id,
             `displayname` AS member_name,
             `ID_MEMBER` AS member_id,
-            '0' AS can_delete,
+            $delete AS can_delete,
             `time` AS time,
             `message`
         FROM `{$shoutBoxTableName}`
@@ -43,7 +50,7 @@ $application->route('GET /shouts', function() use($application, $shoutBoxTableNa
 
     $sth->execute();
 
-    return $application->_json($sth->fetchAll(PDO::FETCH_ASSOC));
+    return $application->json($sth->fetchAll(PDO::FETCH_ASSOC));
 });
 
 $application->route('POST /shout', function() use($application, $shoutBoxTableName) {
@@ -77,3 +84,15 @@ $application->map('error', function(Exception $ex) use($application) {
 });
 
 $application->start();
+
+class User {
+    private $data;
+
+    public function __construct(array $context) {
+        $this->data = $context['user'];
+    }
+
+    public function isAdmin() {
+        return $this->data['is_admin'];
+    }
+}
