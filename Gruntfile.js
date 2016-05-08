@@ -10,7 +10,7 @@ module.exports = function(grunt) {
             upload: {
                 files: [{
                     cwd: 'src',
-                    src: ['api.php'],
+                    src: ['*.php'],
                     dest: '<%= server.path %>'
                 }]
             },

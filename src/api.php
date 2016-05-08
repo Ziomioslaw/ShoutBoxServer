@@ -13,6 +13,7 @@ if (!$context['user']['is_logged']) {
 }
 
 require_once('vendor/autoload.php');
+require_once('User.php');
 
 use flight\Engine;
 
@@ -36,52 +37,21 @@ $application->register(
 );
 
 $application->route('GET /shouts', function() use($application, $shoutBoxTableName, $deleteTime) {
-    $user = $application->user();
+    $function = require_once('get.shouts.php');
 
-    $delete = $user->isAdmin()
-        ? '1'
-        : 'IF(time > ' . (time() - $deleteTime) . ', 1, 0)';
-
-    $sth = $application->db()->prepare("SELECT
-            `ID_SHOUT` AS id,
-            `displayname` AS member_name,
-            `ID_MEMBER` AS member_id,
-            $delete AS can_delete,
-            `time` AS time,
-            `message`
-        FROM `{$shoutBoxTableName}`
-        ORDER BY `ID_SHOUT` DESC
-        LIMIT 20");
-
-    $sth->execute();
-
-    return $application->json($sth->fetchAll(PDO::FETCH_ASSOC));
+    return $application->json($function(
+            $application,
+            $shoutBoxTableName,
+            $deleteTime));
 });
 
 $application->route('POST /shout', function() use($application, $shoutBoxTableName) {
-    $request = $application->request();
-    $memberID = $request->data->memberID;
-    $memberName = $request->data->memberName;
-    $message = $request->data->message;
+    $function = require_once('post.shout.php');
 
-    $sth = $this->pdo->prepare("INSERT INTO {$shoutBoxTableName} (
-            `ID_MEMBER`,
-            `displayname`,
-            `message`,
-            `time`
-        ) VALUES (
-            :memberID,
-            :memberName,
-            :message,
-            UNIX_TIMESTAMP()
-        )");
-
-    $sth->bindParam(':memberID', $memberID, PDO::PARAM_INT);
-    $sth->bindParam(':memberName', $memberName, PDO::PARAM_STR);
-    $sth->bindParam(':message', $message, PDO::PARAM_STR);
-    $sth->execute();
-
-    return $this->pdo->lastInsertId();
+    return $application->json($function(
+            $application,
+            $shoutBoxTableName
+        ));
 });
 
 $application->map('error', function(Exception $ex) use($application) {
@@ -89,15 +59,3 @@ $application->map('error', function(Exception $ex) use($application) {
 });
 
 $application->start();
-
-class User {
-    private $data;
-
-    public function __construct(array $context) {
-        $this->data = $context['user'];
-    }
-
-    public function isAdmin() {
-        return $this->data['is_admin'];
-    }
-}
