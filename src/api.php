@@ -19,7 +19,7 @@ use flight\Engine;
 
 $dbConnection = require_once('db.connection.php');
 $shoutBoxTableName = $dbConnection['dbPrefix'] . 'shoutbox';
-$deleteTime = 5 * 60 * 60; // 5 minutes
+$deleteTime = 18000; // 5 minutes
 
 $application = new Engine();
 $application->register('user', 'User', array($context));
