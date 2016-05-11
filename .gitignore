@@ -2,3 +2,4 @@ db.connection.php
 server.json
 node_modules/
 npm-debug.log
+flight-master/

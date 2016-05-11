@@ -1,5 +1,6 @@
 <?php
-return function ($application, $shoutBoxTableName) {
+return function ($application) {
+    $shoutBoxTableName = $application->get('tableName');
     $request = $application->request();
     $memberID = $request->data->memberID;
     $memberName = $request->data->memberName;

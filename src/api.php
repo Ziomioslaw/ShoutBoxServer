@@ -18,10 +18,9 @@ require_once('User.php');
 use flight\Engine;
 
 $dbConnection = require_once('db.connection.php');
-$shoutBoxTableName = $dbConnection['dbPrefix'] . 'shoutbox';
-$deleteTime = 18000; // 5 minutes
 
 $application = new Engine();
+$application->set('tableName', $dbConnection['dbPrefix'] . 'shoutbox');
 $application->register('user', 'User', array($context));
 $application->register(
     'db',
@@ -36,22 +35,16 @@ $application->register(
     }
 );
 
-$application->route('GET /shouts', function() use($application, $shoutBoxTableName, $deleteTime) {
-    $function = require_once('get.shouts.php');
-
-    return $application->json($function(
-            $application,
-            $shoutBoxTableName,
-            $deleteTime));
+$application->map('time', function() {
+    return time();
 });
 
-$application->route('POST /shout', function() use($application, $shoutBoxTableName) {
-    $function = require_once('post.shout.php');
+$application->route('GET /shouts', function() use($application) {
+    return make($application, 'get.shouts.php');
+});
 
-    return $application->json($function(
-            $application,
-            $shoutBoxTableName
-        ));
+$application->route('POST /shout', function() use($application) {
+    return make($application, 'post.shouts.php');
 });
 
 $application->map('error', function(Exception $ex) use($application) {
@@ -59,3 +52,9 @@ $application->map('error', function(Exception $ex) use($application) {
 });
 
 $application->start();
+
+function make($application, $fileName) {
+    $function = require_once($fileName);
+
+    return $application->json($function($application));
+}
