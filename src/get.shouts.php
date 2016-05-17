@@ -9,7 +9,7 @@ return function ($application) {
 
     $delete = $user->isAdmin()
         ? '1'
-        : 'CASE WHEN (`ID_MEMBER` = ' . $user->getId() . ' AND `time` > ' . ($application->time() - ALLOW_TO_DELETE_TIME) . ') THEN 1 ELSE 0 END';
+        : '`ID_MEMBER` = ' . $user->getId() . ' AND `time` > ' . ($application->time() - ALLOW_TO_DELETE_TIME) . '';
 
     $sth = $application->db()->prepare("SELECT *
         FROM (SELECT

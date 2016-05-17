@@ -40,7 +40,17 @@ $application->map('time', function() {
 });
 
 $application->route('GET /shouts', function() use($application) {
-    return make($application, 'get.shouts.php');
+    require_once(__DIR__ . '/../../Sources/Subs.php');
+
+    $function = require_once('get.shouts.php');
+    $results = $function($application);
+
+    foreach($results as &$row) {
+        $row['time'] = timeformat($row['time']);
+        $row['message'] = doUBBC(censorText($row['message']));
+    }
+
+    return $application->json($results);
 });
 
 $application->route('POST /shout', function() use($application) {
