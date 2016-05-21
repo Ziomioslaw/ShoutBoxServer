@@ -5,7 +5,7 @@ return function ($application) {
 
     $user = $application->user();
 
-    $memberID = $request->data->memberID;
+    $memberID = $user->getId();
     $memberName = $user->getName();
     $message = $request->data->message;
 
