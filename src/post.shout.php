@@ -2,11 +2,14 @@
 return function ($application) {
     $shoutBoxTableName = $application->get('tableName');
     $request = $application->request();
+
+    $user = $application->user();
+
     $memberID = $request->data->memberID;
-    $memberName = $request->data->memberName;
+    $memberName = $user->getName();
     $message = $request->data->message;
 
-    $sth = $this->pdo->prepare("INSERT INTO {$shoutBoxTableName} (
+    $sth = $application->db()->prepare("INSERT INTO {$shoutBoxTableName} (
             `ID_MEMBER`,
             `displayname`,
             `message`,
@@ -23,5 +26,5 @@ return function ($application) {
     $sth->bindParam(':message', $message, PDO::PARAM_STR);
     $sth->execute();
 
-    return $this->pdo->lastInsertId();
+    return $application->db()->lastInsertId();
 };

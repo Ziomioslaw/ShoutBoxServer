@@ -54,7 +54,7 @@ $application->route('GET /shouts', function() use($application) {
 });
 
 $application->route('POST /shout', function() use($application) {
-    return make($application, 'post.shouts.php');
+    return make($application, 'post.shout.php');
 });
 
 $application->map('error', function(Exception $ex) use($application) {
