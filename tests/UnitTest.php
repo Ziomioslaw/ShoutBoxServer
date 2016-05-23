@@ -36,6 +36,15 @@ class UnitTest {
         return $this;
     }
 
+    public function fail($exptected, $result) {
+        echo "Unit test: {$this->name}\nExptected: {$exptected}\nRecived:   {$result}\n";
+        throw new Exception('Unit test faild');
+    }
+
+    public function ok() {
+        echo "[OK] Unit test: {$this->name}\n";
+    }
+
     private function buildApplication() {
         $application = new EngineMock();
         $application->register('user', 'UserMock');

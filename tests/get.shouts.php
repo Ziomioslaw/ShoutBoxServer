@@ -4,6 +4,26 @@ require_once(__DIR__ . '/build.database.php');
 
 $function = require_once(__DIR__ . '/../src/get.shouts.php');
 
+class GetShoutsUnitTest extends UnitTest {
+    public function __construct($name) {
+        parent::__construct($name);
+    }
+
+    public function expectedThatCanDelete($exptected) {
+        $result = array_reduce($this->result, function ($carry, $item) {
+            return $item['can_delete'] ? ($carry +1) : $carry;
+        }, 0);
+
+        if ($result !== $exptected) {
+            $this->fail($exptected, $result);
+        } else {
+            $this->ok();
+        }
+
+        return $this;
+    }
+}
+
 (new GetShoutsUnitTest('Normal user can delete only own shouts'))
     ->setMainTimer(-5 * 60)
     ->insertShout(SECOND_USER_ID)
@@ -38,26 +58,3 @@ $function = require_once(__DIR__ . '/../src/get.shouts.php');
     ->setActiveUser(FIRST_USER_ID)
     ->run($function)
     ->expectedThatCanDelete(2);
-
-class GetShoutsUnitTest extends UnitTest {
-    private $result;
-
-    public function __construct($name) {
-        parent::__construct($name);
-    }
-
-    public function expectedThatCanDelete($exptected) {
-        $result = array_reduce($this->result, function ($carry, $item) {
-            return $item['can_delete'] ? ($carry +1) : $carry;
-        }, 0);
-
-        if ($result !== $exptected) {
-            echo "Unit test: {$this->name}\nExptected: {$exptected}\nRecived:   {$result}\n";
-            throw new Exception('Unit test faild');
-        } else {
-            echo "[OK] Unit test: {$this->name}\n";
-        }
-
-        return $this;
-    }
-}

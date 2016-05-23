@@ -1,6 +1,6 @@
 <?php
 require_once(__DIR__ . '/../flight-master/flight/autoload.php');
-use flight;
+use flight\Engine;
 
 class EngineMock extends Engine {
     private $request;
