@@ -1,6 +1,5 @@
 <?php
 require_once(__DIR__ . '/UnitTest.php');
-require_once(__DIR__ . '/build.database.php');
 
 $function = require_once(__DIR__ . '/../src/get.shouts.php');
 

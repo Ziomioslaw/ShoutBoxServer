@@ -9,11 +9,24 @@ class EngineMock extends Engine {
         return $this->request;
     }
 
-    public function mockSetRequest(RequestMock $mock) {
-        $this->request = $mock;
+    public function setRequestData(array $data) {
+        $this->request = new RequestMock();
+        $this->request->data = new RequestMockData($data);
     }
 }
 
 class RequestMock {
+    public $data = null;
+}
 
+class RequestMockData {
+    private $data;
+
+    public function __construct(array $data) {
+        $this->data = $data;
+    }
+
+    public function __get($name) {
+        return $this->data[$name];
+    }
 }

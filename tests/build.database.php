@@ -12,7 +12,7 @@ function buildDB($application) {
     $application->set('tableName', 'shoutboxTable');
     $application->db()->exec("CREATE TABLE IF NOT EXISTS `{$application->get('tableName')}`
         (
-            `ID_SHOUT` int(11) NOT NULL,
+            `ID_SHOUT` INTEGER PRIMARY KEY AUTOINCREMENT,
             `ID_MEMBER` int(11) NOT NULL,
             `displayname` tinytext,
             `message` text NOT NULL,

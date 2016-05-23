@@ -2,6 +2,7 @@
 require_once(__DIR__ . '/../flight-master/flight/autoload.php');
 require_once(__DIR__ . '/UserMock.php');
 require_once(__DIR__ . '/EngineMock.php');
+require_once(__DIR__ . '/build.database.php');
 
 class UnitTest {
     private $name;

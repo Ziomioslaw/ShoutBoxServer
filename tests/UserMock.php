@@ -11,6 +11,10 @@ class UserMock {
         return $this->user['id'];
     }
 
+    public function getName() {
+        return $this->user['name'];
+    }
+
     public function isAdmin() {
         return $this->user['isAdmin'];
     }
