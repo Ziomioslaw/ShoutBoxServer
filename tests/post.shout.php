@@ -53,3 +53,9 @@ class PostUnitTest extends UnitTest {
     ->send('Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum')
     ->run($function)
     ->exactlyTheSame();
+
+(new PostUnitTest('Post message with apostrophe or quotation mark'))
+    ->setActiveUser(ADMIN_USER_ID)
+    ->send('Excepteur sint \'occaecat" cupidatat non proident", sunt in culpa qui officia deserunt mollit anim\' id est laborum')
+    ->run($function)
+    ->exactlyTheSame();
