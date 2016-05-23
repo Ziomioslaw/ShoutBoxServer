@@ -19,7 +19,7 @@ class PostUnitTest extends UnitTest {
         return $this;
     }
 
-    public function exaclyTheSame() {
+    public function exactlyTheSame() {
         $result = $this->getLastAddedShout();
         if (!$result) {
             throw new Exception('There is no shouts in the database');
@@ -52,4 +52,4 @@ class PostUnitTest extends UnitTest {
     ->setActiveUser(ADMIN_USER_ID)
     ->send('Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum')
     ->run($function)
-    ->exaclyTheSame();
+    ->exactlyTheSame();
