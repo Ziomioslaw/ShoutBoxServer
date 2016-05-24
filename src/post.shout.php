@@ -6,8 +6,10 @@ return function ($application) {
 
     $memberID = $user->getId();
     $memberName = $user->getName();
-    $message = $request->data->message;
     $time = $application->time();
+    $message = get_magic_quotes_gpc()
+        ? stripslashes($request->data->message)
+        : $request->data->message;
 
     $sth = $application->db()->prepare("INSERT INTO {$shoutBoxTableName} (
             `ID_MEMBER`,
