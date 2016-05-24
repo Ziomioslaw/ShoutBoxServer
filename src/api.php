@@ -57,14 +57,18 @@ $application->route('POST /shout', function() use($application) {
     return make($application, 'post.shout.php');
 });
 
+$application->route('POST /shout/@id:[0-9]+/delete', function($id) use($application) {
+    return make($application, 'delete.shout.php', func_get_args());
+});
+
 $application->map('error', function(Exception $ex) use($application) {
     $application->_error($ex);
 });
 
 $application->start();
 
-function make($application, $fileName) {
+function make($application, $fileName, $arguments = array()) {
     $function = require_once($fileName);
 
-    return $application->json($function($application));
+    return $application->json($function($application, $arguments));
 }
