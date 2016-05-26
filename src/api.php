@@ -35,6 +35,12 @@ $application->register(
     }
 );
 
+$application->map('buildDeleteSQL', function(User $user) use($application) {
+    return $user->isAdmin()
+        ? '1'
+        : '`ID_MEMBER` = ' . $user->getId() . ' AND `time` > ' . ($application->time() - ALLOW_TO_DELETE_TIME);
+});
+
 $application->map('time', function() {
     return time();
 });

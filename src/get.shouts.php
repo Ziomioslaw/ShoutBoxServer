@@ -6,10 +6,7 @@ return function ($application) {
     $user = $application->user();
     $shoutBoxTableName = $application->get('tableName');
     $limit = DEFAULT_SHOUTS_LIMIT;
-
-    $delete = $user->isAdmin()
-        ? '1'
-        : '`ID_MEMBER` = ' . $user->getId() . ' AND `time` > ' . ($application->time() - ALLOW_TO_DELETE_TIME) . '';
+    $delete = $application->buildDeleteSQL($user);
 
     $sth = $application->db()->prepare("SELECT *
         FROM (SELECT

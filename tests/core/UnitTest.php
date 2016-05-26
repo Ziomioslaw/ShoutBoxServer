@@ -54,6 +54,11 @@ class UnitTest {
         $application->map('time', function() {
             return 100000;
         });
+        $application->map('buildDeleteSQL', function(UserMock $user) use($application) {
+            return $user->isAdmin()
+                ? '1'
+                : '`ID_MEMBER` = ' . $user->getId() . ' AND `time` > ' . ($application->time() - ALLOW_TO_DELETE_TIME);
+        });
 
         return $application;
     }
