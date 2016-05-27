@@ -67,6 +67,10 @@ $application->route('POST /shout/@id:[0-9]+/delete', function($id) use($applicat
     return make($application, 'delete.shout.php', func_get_args());
 });
 
+$application->route('POST /shout/@id:[0-9]+/edit', function($id) use($application) {
+    return make($application, 'edit.shout.php', func_get_args());
+});
+
 $application->map('error', function(Exception $ex) use($application) {
     $application->_error($ex);
 });
