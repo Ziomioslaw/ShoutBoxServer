@@ -2,6 +2,7 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+define('ALLOW_TO_DELETE_TIME', 18000);
 
 require_once('../../SSI.php');
 if (!defined('SMF')) {

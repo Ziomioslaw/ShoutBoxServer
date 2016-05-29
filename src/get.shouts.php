@@ -1,6 +1,5 @@
 <?php
 define('DEFAULT_SHOUTS_LIMIT', 20);
-define('ALLOW_TO_DELETE_TIME', 18000);
 
 return function ($application) {
     $user = $application->user();

@@ -1,6 +1,6 @@
 <?php
 class UserMock {
-    private $user;
+    private $user = null;
     private $userId;
 
     public function setActiveUser(array $user) {
@@ -8,14 +8,22 @@ class UserMock {
     }
 
     public function getId() {
-        return $this->user['id'];
+        return $this->getUserData('id');
     }
 
     public function getName() {
-        return $this->user['name'];
+        return $this->getUserData('name');
     }
 
     public function isAdmin() {
-        return $this->user['isAdmin'];
+        return $this->getUserData('isAdmin');
+    }
+
+    private function getUserData($field) {
+        if ($this->user !== null) {
+            return $this->user[$field];
+        }
+
+        throw new Exception('User not set!');
     }
 }

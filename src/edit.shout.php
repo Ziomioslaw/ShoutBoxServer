@@ -9,12 +9,11 @@ return function ($application, $arguments) {
     $delete = $application->buildDeleteSQL($user);
 
     $stm = $application->db()->prepare("UPDATE {$shoutBoxTableName}
-            SET `message` = replace(:search, :replace, `message`)
-            WHERE ID_SHOUT = :shoutId AND {$delete}"
-        );
+            SET `message` = replace(`message`, :search, :replace)
+            WHERE ID_SHOUT = :shoutId AND {$delete}");
 
-    $stm->bindParam(':search', $search, PDO::PARAM_STRING);
-    $stm->bindParam(':replace', $replace, PDO::PARAM_STRING);
+    $stm->bindParam(':search', $search, PDO::PARAM_STR);
+    $stm->bindParam(':replace', $replace, PDO::PARAM_STR);
     $stm->bindParam(':shoutId', $shoutId, PDO::PARAM_INT);
 
     return $stm->execute();

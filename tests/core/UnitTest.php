@@ -3,6 +3,8 @@ require_once(__DIR__ . '/UserMock.php');
 require_once(__DIR__ . '/EngineMock.php');
 require_once(__DIR__ . '/../builds/build.database.php');
 
+define('ALLOW_TO_DELETE_TIME', 18000);
+
 class UnitTest {
     private $name;
     protected $application;
@@ -19,8 +21,13 @@ class UnitTest {
         return $this;
     }
 
-    public function insertShout($memberId) {
-        insertIntoShoutbox($this->application, $memberId);
+    public function insertShout($memberId, $message = null) {
+        $values = array();
+        if ($message !== null) {
+            $values['message'] = $message;
+        }
+
+        insertIntoShoutbox($this->application, $memberId, $values);
         return $this;
     }
 
@@ -31,8 +38,8 @@ class UnitTest {
         return $this;
     }
 
-    public function run($function) {
-        $this->result = $function($this->application);
+    public function run($function, array $arguments = array()) {
+        $this->result = $function($this->application, $arguments);
         return $this;
     }
 
@@ -43,6 +50,18 @@ class UnitTest {
 
     public function ok() {
         echo "[OK] Unit test: {$this->name}\n";
+    }
+
+    protected function getShout($shoutId) {
+        $shoutBoxTableName = $this->application->get('tableName');
+
+        $sth = $this->application->db()->prepare("SELECT *
+            FROM $shoutBoxTableName
+            WHERE `ID_SHOUT` = $shoutId");
+
+        $sth->execute();
+
+        return $sth->fetch(PDO::FETCH_ASSOC);
     }
 
     private function buildApplication() {
