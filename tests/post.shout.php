@@ -20,14 +20,22 @@ class PostUnitTest extends UnitTest {
     }
 
     public function exactlyTheSame() {
+        return $this->compearMessage($this->message);
+    }
+
+    public function exactlyAs($expected) {
+        return $this->compearMessage($expected);
+    }
+
+    private function compearMessage($expected) {
         $result = $this->getLastAddedShout();
         if (!$result) {
             throw new Exception('There is no shouts in the database');
         }
 
         $resultMessage = $result['message'];
-        if ($resultMessage !== $this->message) {
-            $this->fail($this->message, $resultMessage);
+        if ($resultMessage !== $expected) {
+            $this->fail($expected, $resultMessage);
         } else {
             $this->ok();
         }
@@ -58,4 +66,10 @@ class PostUnitTest extends UnitTest {
     ->setActiveUser(ADMIN_USER_ID)
     ->send('Excepteur sint \'occaecat" cupidatat non proident", sunt in culpa qui officia deserunt mollit anim\' id est laborum')
     ->run($function)
-    ->exactlyTheSame();
+    ->exactlyAs('Excepteur sint \'occaecat&quot; cupidatat non proident&quot;, sunt in culpa qui officia deserunt mollit anim\' id est laborum');
+
+(new PostUnitTest('Post message with HTML encoded characters'))
+    ->setActiveUser(ADMIN_USER_ID)
+    ->send('<hug>')
+    ->run($function)
+    ->exactlyAs('&lt;hug&gt;');
