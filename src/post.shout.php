@@ -10,8 +10,11 @@ return function ($application) {
     $message = htmlentities(
             get_magic_quotes_gpc()
                 ? stripslashes($request->data->message)
-                : $request->data->message
+                : $request->data->message,
+            ENT_QUOTES,
+            'UTF-8'
         );
+
 
     $sth = $application->db()->prepare("INSERT INTO {$shoutBoxTableName} (
             `ID_MEMBER`,
