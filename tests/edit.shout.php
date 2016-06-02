@@ -37,3 +37,11 @@ class EditShoutsUnitTest extends UnitTest {
     ->replace('dignixsimos', 'dignissimos')
     ->run($function, array(1))
     ->expectedChange(1, 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis');
+
+(new EditShoutsUnitTest('Edition with non-asci characters'))
+    ->setMainTimer(-5 * 60)
+    ->setActiveUser(SECOND_USER_ID)
+    ->insertShout(SECOND_USER_ID, 'At vero eos et ążźćńłó et iusto odio dignixsimos ducimus qui blanditiis')
+    ->replace('ążźćńłó', 'ĄŻŹĆŃŁÓ')
+    ->run($function, array(1))
+    ->expectedChange(1, 'At vero eos et ĄŻŹĆŃŁÓ et iusto odio dignixsimos ducimus qui blanditiis');
