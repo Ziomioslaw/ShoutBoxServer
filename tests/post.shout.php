@@ -66,7 +66,7 @@ class PostUnitTest extends UnitTest {
     ->setActiveUser(ADMIN_USER_ID)
     ->send('Excepteur sint \'occaecat" cupidatat non proident", sunt in culpa qui officia deserunt mollit anim\' id est laborum')
     ->run($function)
-    ->exactlyAs('Excepteur sint \'occaecat&quot; cupidatat non proident&quot;, sunt in culpa qui officia deserunt mollit anim\' id est laborum');
+    ->exactlyAs('Excepteur sint &#039;occaecat&quot; cupidatat non proident&quot;, sunt in culpa qui officia deserunt mollit anim&#039; id est laborum');
 
 (new PostUnitTest('Post message with HTML encoded characters'))
     ->setActiveUser(ADMIN_USER_ID)
