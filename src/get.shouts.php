@@ -14,7 +14,8 @@ return function ($application) {
                 `ID_MEMBER` AS member_id,
                 $delete AS can_delete,
                 `time` AS time,
-                `message`
+                `message`,
+                `edited`
             FROM $shoutBoxTableName
             ORDER BY `ID_SHOUT` DESC
             LIMIT $limit

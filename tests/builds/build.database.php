@@ -17,7 +17,8 @@ function buildDB($application) {
             `displayname` tinytext,
             `message` text NOT NULL,
             `email` tinytext,
-            `time` int(11) NOT NULL
+            `time` int(11) NOT NULL,
+            `edited` int(11)
         )");
 
     $lastShoutId = DEFAULT_LAST_SHOUT;
