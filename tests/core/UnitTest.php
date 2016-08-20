@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/UserMock.php');
+require_once(__DIR__ . '/ForumMock.php');
 require_once(__DIR__ . '/EngineMock.php');
 require_once(__DIR__ . '/../builds/build.database.php');
 
@@ -67,6 +68,7 @@ class UnitTest {
     private function buildApplication() {
         $application = new EngineMock();
         $application->register('user', 'UserMock');
+        $application->register('forum', 'ForumMock');
         $application->map('error', function(Exception $ex) use($application) {
             $application->_error($ex);
         });

@@ -7,14 +7,13 @@ return function ($application) {
     $memberID = $user->getId();
     $memberName = $user->getName();
     $time = $application->time();
+
+    $message = $application->forum()->findTopicsOfForum($request->data->message);
     $message = htmlentities(
-            get_magic_quotes_gpc()
-                ? stripslashes($request->data->message)
-                : $request->data->message,
+            get_magic_quotes_gpc() ? stripslashes($message) : $message,
             ENT_QUOTES,
             'UTF-8'
         );
-
 
     $sth = $application->db()->prepare("INSERT INTO {$shoutBoxTableName} (
             `ID_MEMBER`,

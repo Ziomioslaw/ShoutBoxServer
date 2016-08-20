@@ -15,6 +15,7 @@ if (!$context['user']['is_logged']) {
 
 require_once('vendor/autoload.php');
 require_once('User.php');
+require_once('Forum.php');
 
 use flight\Engine;
 
@@ -22,6 +23,7 @@ $dbConnection = require_once('db.connection.php');
 
 $application = new Engine();
 $application->set('tableName', $dbConnection['dbPrefix'] . 'shoutbox');
+$application->register('forum', 'Forum', array($application, $dbConnection['dbPrefix']), null);
 $application->register('user', 'User', array($context));
 $application->register(
     'db',
